@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /launch-notes.html
+Sitemap: https://www.eagleacservices.com/sitemap.xml
