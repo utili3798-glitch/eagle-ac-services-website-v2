@@ -3,12 +3,30 @@ const navToggle = document.querySelector('.nav-toggle');
 const siteNav = document.querySelector('.site-nav');
 const dropdown = document.querySelector('.nav-dropdown');
 const dropdownButton = document.querySelector('.nav-dropdown > button');
+const dropdownMenu = document.querySelector('.nav-dropdown__menu');
+
+const setDropdownScroll = () => {
+  if (!dropdownMenu) return;
+  const menuTop = dropdownMenu.getBoundingClientRect().top;
+  const availableHeight = window.innerHeight - menuTop - 16;
+  const maxHeight = Math.max(180, availableHeight);
+  dropdownMenu.style.maxHeight = `${maxHeight}px`;
+  dropdownMenu.style.overflowY = dropdownMenu.scrollHeight > maxHeight ? 'auto' : '';
+};
+
+const resetDropdownScroll = () => {
+  if (!dropdownMenu) return;
+  dropdownMenu.scrollTop = 0;
+  dropdownMenu.style.maxHeight = '';
+  dropdownMenu.style.overflowY = '';
+};
 
 if (navToggle && siteNav) {
   navToggle.addEventListener('click', () => {
     const expanded = navToggle.getAttribute('aria-expanded') === 'true';
     navToggle.setAttribute('aria-expanded', String(!expanded));
     siteNav.classList.toggle('is-open');
+    if (!expanded) setDropdownScroll();
   });
 }
 
@@ -17,6 +35,19 @@ if (dropdownButton && dropdown) {
     const expanded = dropdownButton.getAttribute('aria-expanded') === 'true';
     dropdownButton.setAttribute('aria-expanded', String(!expanded));
     dropdown.classList.toggle('is-open');
+    if (expanded) {
+      resetDropdownScroll();
+    } else {
+      requestAnimationFrame(setDropdownScroll);
+    }
+  });
+}
+
+if (dropdown && dropdownMenu) {
+  dropdown.addEventListener('mouseenter', setDropdownScroll);
+  dropdown.addEventListener('focusin', setDropdownScroll);
+  dropdown.addEventListener('mouseleave', () => {
+    if (!dropdown.classList.contains('is-open')) resetDropdownScroll();
   });
 }
 
@@ -24,10 +55,20 @@ document.addEventListener('click', (event) => {
   if (siteNav && navToggle && !siteNav.contains(event.target) && !navToggle.contains(event.target)) {
     siteNav.classList.remove('is-open');
     navToggle.setAttribute('aria-expanded', 'false');
+    if (dropdown) dropdown.classList.remove('is-open');
+    if (dropdownButton) dropdownButton.setAttribute('aria-expanded', 'false');
+    resetDropdownScroll();
   }
   if (dropdown && !dropdown.contains(event.target)) {
     dropdown.classList.remove('is-open');
     if (dropdownButton) dropdownButton.setAttribute('aria-expanded', 'false');
+    resetDropdownScroll();
+  }
+});
+
+window.addEventListener('resize', () => {
+  if (dropdown?.matches(':hover') || dropdown?.classList.contains('is-open')) {
+    setDropdownScroll();
   }
 });
 

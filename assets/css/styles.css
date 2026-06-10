@@ -47,7 +47,7 @@ img, svg { max-width: 100%; height: auto; }
 .site-nav a, .nav-dropdown > button { padding: .75rem .85rem; color: var(--ink); border-radius: 999px; font-weight: 750; background: transparent; border: 0; font: inherit; cursor: pointer; }
 .site-nav a:hover, .site-nav a[aria-current="page"], .nav-dropdown > button:hover { background: var(--blue-100); color: var(--blue-700); }
 .nav-dropdown { position: relative; }
-.nav-dropdown__menu { position: absolute; right: 0; top: calc(100% + .5rem); min-width: 240px; padding: .6rem; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-sm); box-shadow: var(--shadow); display: none; }
+.nav-dropdown__menu { position: absolute; right: 0; top: calc(100% + .5rem); min-width: 240px; padding: .6rem; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-sm); box-shadow: var(--shadow); display: none; overflow-x: hidden; overscroll-behavior: contain; }
 .nav-dropdown:hover .nav-dropdown__menu, .nav-dropdown.is-open .nav-dropdown__menu { display: grid; }
 .nav-dropdown__menu a { display: block; border-radius: 10px; }
 .header-actions { display: flex; align-items: center; gap: .55rem; }
